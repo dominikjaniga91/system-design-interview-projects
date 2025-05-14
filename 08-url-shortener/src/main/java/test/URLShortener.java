@@ -1,4 +1,6 @@
 package test;
 
-public class URL {
+public class URLShortener {
+
+//    private final Gson gson;
 }

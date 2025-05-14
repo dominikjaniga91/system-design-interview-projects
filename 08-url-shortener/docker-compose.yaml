@@ -1,0 +1,12 @@
+services:
+  url_shortener_db:
+    container_name: 'url_shortener_db'
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=testuser
+      - POSTGRES_DB=urls
+    volumes:
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    ports:
+      - "5432:5432"

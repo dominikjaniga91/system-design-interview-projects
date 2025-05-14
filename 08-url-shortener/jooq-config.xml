@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.13.0.xsd">
+
+    <jdbc>
+        <driver>org.postgresql.Driver</driver>
+        <url>jdbc:postgresql://url_shortener_db:5432/urls</url>
+        <user>testuser</user>
+        <password>password</password>
+    </jdbc>
+
+    <generator>
+        <name>org.jooq.codegen.JavaGenerator</name>
+
+        <database>
+            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+            <inputSchema>public</inputSchema>
+            <includes>.*</includes>
+        </database>
+
+        <target>
+            <packageName>com.baeldung.jooq.model</packageName>
+            <directory>C:\Users\Dominik Janiga\IdeaProjects\system-design-interview\08-url-shortener\src\main\java</directory>
+        </target>
+    </generator>
+</configuration>
