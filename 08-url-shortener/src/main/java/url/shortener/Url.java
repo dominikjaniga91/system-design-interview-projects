@@ -1,6 +1,6 @@
-package test;
+package url.shortener;
 
-public class URL {
+class Url {
     private String urlValue;
 
     public String getUrlValue() {

@@ -88,7 +88,7 @@
                             <includes>.*</includes>
                         </database>
                         <target>
-                            <packageName>test</packageName>
+                            <packageName>data</packageName>
                             <directory>src/main/java</directory>
                         </target>
                     </generator>

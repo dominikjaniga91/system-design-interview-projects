@@ -1,11 +1,11 @@
-package test;
+package url.shortener;
 
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.util.Map;
 
-public class AppConfig {
+class AppConfig {
 
     private final String username;
     private final String password;

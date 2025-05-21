@@ -1,11 +1,11 @@
-package test;
+package url.shortener;
 
-public class Base62Encoder implements BaseEncoder {
+class Base62Encoder implements BaseEncoder {
 
     private final int base;
     private final String characters;
 
-    public Base62Encoder() {
+    Base62Encoder() {
         this.base = 62;
         this.characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     }

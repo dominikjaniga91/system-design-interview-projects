@@ -1,4 +1,4 @@
-package test;
+package url.shortener;
 
 public interface BaseEncoder {
 
