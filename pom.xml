@@ -17,6 +17,8 @@
         <jooq.version>3.20.3</jooq.version>
         <postgresql.version>42.7.5</postgresql.version>
         <snakeyaml.version>2.2</snakeyaml.version>
+        <jedis.version>6.0.0</jedis.version>
+        <log4j-api.version>2.24.3</log4j-api.version>
     </properties>
     <modules>
         <module>08-url-shortener</module>
@@ -28,6 +30,12 @@
                 <groupId>com.sparkjava</groupId>
                 <artifactId>spark-core</artifactId>
                 <version>${spark-core.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.google.code.gson</groupId>
@@ -63,6 +71,32 @@
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
                 <version>${snakeyaml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j2-impl</artifactId>
+                <version>${log4j-api.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -7,35 +7,69 @@ import java.util.Map;
 
 class AppConfig {
 
-    private final String username;
-    private final String password;
-    private final String url;
+    private final DatabaseConfig database;
+    private final JedisConfig jedis;
 
-    private AppConfig(String username, String password, String url) {
-        this.username = username;
-        this.password = password;
-        this.url = url;
+    private AppConfig(DatabaseConfig database, JedisConfig jedis) {
+        this.database = database;
+        this.jedis = jedis;
     }
 
-    static AppConfig load() {
+    public static AppConfig load() {
         Yaml yaml = new Yaml();
         try (var inputStream = AppConfig.class.getClassLoader().getResourceAsStream("configuration.yaml")) {
+            if (inputStream == null) {
+                throw new RuntimeException("Missing configuration.yaml in resources");
+            }
+
             Map<String, Object> config = yaml.load(inputStream);
-            return new AppConfig(config.get("username").toString(), config.get("password").toString(), config.get("url").toString());
+
+            var dbMap = (Map<String, Object>) config.get("database");
+            var jedisMap = (Map<String, Object>) config.get("jedis");
+
+            DatabaseConfig db = new DatabaseConfig(
+                    dbMap.get("username").toString(),
+                    dbMap.get("password").toString(),
+                    dbMap.get("url").toString()
+            );
+
+            JedisConfig jedis = new JedisConfig(
+                    jedisMap.get("host").toString(),
+                    (int) jedisMap.get("port")
+            );
+
+            return new AppConfig(db, jedis);
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to load configuration", e);
         }
     }
 
-    public String getUsername() {
-        return username;
+    String getUsername() { return database.username; }
+    String getPassword() { return database.password; }
+    String getUrl() { return database.url; }
+    String getJedisHost() { return jedis.host; }
+    int getJedisPort() { return jedis.port; }
+
+    private static class DatabaseConfig {
+        private final String username;
+        private final String password;
+        private final String url;
+
+        private DatabaseConfig(String username, String password, String url) {
+            this.username = username;
+            this.password = password;
+            this.url = url;
+        }
     }
 
-    public String getPassword() {
-        return password;
-    }
+    private static class JedisConfig {
+        private final String host;
+        private final int port;
 
-    public String getUrl() {
-        return url;
+        private JedisConfig(String host, int port) {
+            this.host = host;
+            this.port = port;
+        }
     }
 }
