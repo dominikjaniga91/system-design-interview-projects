@@ -1,0 +1,8 @@
+database:
+  driver-class-name: org.postgresql.Driver
+  username: testuser1
+  password: password1
+  url: jdbc:postgresql://localhost:5432/urls1
+jedis:
+  host: localhost
+  port: 6380

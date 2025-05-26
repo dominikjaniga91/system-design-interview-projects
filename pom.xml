@@ -19,6 +19,9 @@
         <snakeyaml.version>2.2</snakeyaml.version>
         <jedis.version>6.0.0</jedis.version>
         <log4j-api.version>2.24.3</log4j-api.version>
+        <assertj-core.version>3.27.3</assertj-core.version>
+        <tc.postgres.version>1.20.0</tc.postgres.version>
+        <tc.redis.version>1.6.4</tc.redis.version>
     </properties>
     <modules>
         <module>08-url-shortener</module>
@@ -98,6 +101,26 @@
                 <artifactId>log4j-slf4j2-impl</artifactId>
                 <version>${log4j-api.version}</version>
             </dependency>
+
+<!--            tests-->
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${tc.postgres.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.redis.testcontainers</groupId>
+                <artifactId>testcontainers-redis</artifactId>
+                <version>${tc.redis.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -129,10 +152,33 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include> <!-- Only runs unit tests -->
+                    </includes>
+                    <excludes>
+                        <exclude>**/*IntegrationTest.java</exclude> <!-- Ensures no integration tests are run -->
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.22.2</version>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*Test.java</include> <!-- Only runs unit tests -->
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
