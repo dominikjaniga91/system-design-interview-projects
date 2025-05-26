@@ -63,10 +63,10 @@ class UrlBase62ShortenerIntegrationTest {
 
     private void prepareDatabase(DSLContext context) {
         context.execute("""
-                CREATE SEQUENCE custom_user_id_seq START 10_000_000;
+                CREATE SEQUENCE url_id_seq START 10_000_000;
                 
                 CREATE TABLE urls (
-                          id INTEGER PRIMARY KEY DEFAULT nextval('custom_user_id_seq'),
+                          id INTEGER PRIMARY KEY DEFAULT nextval('url_id_seq'),
                           short_url VARCHAR DEFAULT NULL,
                           long_url  VARCHAR DEFAULT NULL UNIQUE
                       );
