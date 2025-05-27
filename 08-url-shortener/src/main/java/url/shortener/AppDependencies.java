@@ -9,22 +9,17 @@ import java.sql.SQLException;
 
 class AppDependencies {
 
-    private final UrlShortener urlShortener;
-    private final UrlRepository urlRepository;
+    private final UrlController urlController;
 
     AppDependencies(AppConfig config) throws SQLException {
         var connection = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
         var context = DSL.using(connection, SQLDialect.POSTGRES);
         var jedisPool = new JedisPool(config.getJedisHost(), config.getJedisPort());
-        urlRepository = new UrlSqlRepositoryImpl(context, jedisPool);
-        urlShortener = new UrlBase62Shortener(urlRepository, new Base62Encoder());
+        UrlRepository urlRepository = new UrlSqlRepositoryImpl(context, jedisPool);
+        urlController = new UrlController(new UrlBase62Shortener(urlRepository, new Base62Encoder()), urlRepository);
     }
 
-    public UrlShortener getUrlShortener() {
-        return urlShortener;
-    }
-
-    public UrlRepository getUrlRepository() {
-        return urlRepository;
+    UrlController getUrlController() {
+        return urlController;
     }
 }

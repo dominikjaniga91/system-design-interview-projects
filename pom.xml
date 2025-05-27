@@ -22,6 +22,7 @@
         <assertj-core.version>3.27.3</assertj-core.version>
         <tc.postgres.version>1.20.0</tc.postgres.version>
         <tc.redis.version>1.6.4</tc.redis.version>
+        <rest-assured.version>5.5.5</rest-assured.version>
     </properties>
     <modules>
         <module>08-url-shortener</module>
@@ -119,6 +120,12 @@
                 <groupId>com.redis.testcontainers</groupId>
                 <artifactId>testcontainers-redis</artifactId>
                 <version>${tc.redis.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${rest-assured.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

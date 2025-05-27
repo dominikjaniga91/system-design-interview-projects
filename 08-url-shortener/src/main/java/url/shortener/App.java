@@ -10,7 +10,7 @@ public class App {
 
     public static void main(String[] args) throws SQLException {
         AppDependencies dependencies = new AppDependencies(AppConfig.load());
-        new Server(dependencies.getUrlShortener(), dependencies.getUrlRepository()).start();
+        new Server(dependencies.getUrlController()).start();
         LOGGER.info("Server started");
     }
 }
