@@ -10,15 +10,21 @@ import java.sql.SQLException;
 class AppDependencies {
 
     private final UrlShortener urlShortener;
+    private final UrlRepository urlRepository;
 
     AppDependencies(AppConfig config) throws SQLException {
         var connection = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
         var context = DSL.using(connection, SQLDialect.POSTGRES);
         var jedisPool = new JedisPool(config.getJedisHost(), config.getJedisPort());
-        urlShortener = new UrlBase62Shortener(new UrlSqlRepositoryImpl(context, jedisPool), new Base62Encoder());
+        urlRepository = new UrlSqlRepositoryImpl(context, jedisPool);
+        urlShortener = new UrlBase62Shortener(urlRepository, new Base62Encoder());
     }
 
     public UrlShortener getUrlShortener() {
         return urlShortener;
+    }
+
+    public UrlRepository getUrlRepository() {
+        return urlRepository;
     }
 }

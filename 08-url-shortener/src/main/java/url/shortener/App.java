@@ -9,8 +9,8 @@ public class App {
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) throws SQLException {
-        AppDependencies appDependencies = new AppDependencies(AppConfig.load());
-        new Server(appDependencies.getUrlShortener()).start();
+        AppDependencies dependencies = new AppDependencies(AppConfig.load());
+        new Server(dependencies.getUrlShortener(), dependencies.getUrlRepository()).start();
         LOGGER.info("Server started");
     }
 }

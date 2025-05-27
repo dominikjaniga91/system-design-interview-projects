@@ -56,28 +56,36 @@ class UrlSqlRepositoryImpl implements UrlRepository {
     }
 
     @Override
-    public Optional<String> findShortUrl(String url) {
-        LOGGER.info("Finding short URL - {}", url);
-        try (Jedis jedis = jedisPool.getResource()) {
-            String cachedUrl = jedis.get(url);
-            if (cachedUrl != null) {
-                LOGGER.info("Short URL found in cache {}", cachedUrl);
-                return Optional.of(cachedUrl);
-            }
-
-            String dbShortUrl = dslContext.select(Urls.URLS.SHORT_URL)
+    public Optional<String> findShortUrl(String longUrl) {
+        LOGGER.info("Finding short URL - {}", longUrl);
+        try {
+            return dslContext.select(Urls.URLS.SHORT_URL)
                     .from(Urls.URLS)
-                    .where(Urls.URLS.LONG_URL.eq(url))
-                    .fetchOne(Urls.URLS.SHORT_URL);
+                    .where(Urls.URLS.LONG_URL.eq(longUrl))
+                    .fetchOptional(Urls.URLS.SHORT_URL);
+        } catch (Exception e) {
+            LOGGER.error("Error while getting short URL - {}", longUrl, e);
+            throw new RuntimeException(e);
+        }
+    }
 
-            if (dbShortUrl != null) {
-                LOGGER.info("Short URL found in database. Caching the result {}", dbShortUrl);
-                jedis.set(url, dbShortUrl);
+    @Override
+    public String findLongUrl(String shortUrl) {
+        LOGGER.info("Finding long URL - {}", shortUrl);
+        try (Jedis jedis = jedisPool.getResource()) {
+            String cachedUrl = jedis.get(shortUrl);
+            if (cachedUrl != null) {
+                LOGGER.info("Long URL found in cache {}", cachedUrl);
+                return cachedUrl;
             }
 
-            return Optional.ofNullable(dbShortUrl);
+            return dslContext.select(Urls.URLS.SHORT_URL)
+                    .from(Urls.URLS)
+                    .where(Urls.URLS.SHORT_URL.eq(shortUrl))
+                    .fetchOptional(Urls.URLS.LONG_URL)
+                    .orElseThrow(() -> new RuntimeException("Cannot find long URL in database"));
         } catch (Exception e) {
-            LOGGER.error("Error while getting short URL - {}", url, e);
+            LOGGER.error("Error while getting long URL - {}", shortUrl, e);
             throw new RuntimeException(e);
         }
     }

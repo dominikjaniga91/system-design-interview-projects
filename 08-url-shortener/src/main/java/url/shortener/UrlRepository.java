@@ -9,4 +9,6 @@ public interface UrlRepository {
     void saveShortURL(Integer id, String shortUrl, String longUrl);
 
     Optional<String> findShortUrl(String url);
+
+    String findLongUrl(String url);
 }
