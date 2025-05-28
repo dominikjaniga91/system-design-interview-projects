@@ -5,6 +5,8 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.IOException;
 import java.util.Map;
 
+import static java.lang.String.format;
+
 class AppConfig {
 
     private final DatabaseConfig database;
@@ -16,8 +18,9 @@ class AppConfig {
     }
 
     public static AppConfig load() {
+        String profile = System.getProperty("profile");
         Yaml yaml = new Yaml();
-        try (var inputStream = AppConfig.class.getClassLoader().getResourceAsStream("configuration.yaml")) {
+        try (var inputStream = AppConfig.class.getClassLoader().getResourceAsStream(format("configuration-%s.yaml", profile))) {
             if (inputStream == null) {
                 throw new RuntimeException("Missing configuration.yaml in resources");
             }
