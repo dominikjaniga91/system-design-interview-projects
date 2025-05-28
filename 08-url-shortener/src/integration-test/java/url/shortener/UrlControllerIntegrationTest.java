@@ -1,9 +1,7 @@
 package url.shortener;
 
 import io.restassured.RestAssured;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import spark.Spark;
 
 import static io.restassured.RestAssured.given;
@@ -12,8 +10,8 @@ import static org.hamcrest.Matchers.*;
 
 class UrlControllerIntegrationTest {
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         Spark.get("/shortener/api/v1/test" ,(req, res) -> "Test");
         UrlController urlController = new UrlController(new UrlShortenerMock(), new InMemoryUrlRepository());
         urlController.routes();
@@ -47,8 +45,8 @@ class UrlControllerIntegrationTest {
                 .body(equalTo("Test"));
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void tearDown() {
         Spark.stop();
     }
 }
