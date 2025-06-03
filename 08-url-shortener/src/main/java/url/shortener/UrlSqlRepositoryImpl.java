@@ -71,7 +71,7 @@ class UrlSqlRepositoryImpl implements UrlRepository {
 
     @Override
     public String findLongUrl(String shortUrl) {
-        LOGGER.info("Finding long URL - {}", shortUrl);
+        LOGGER.info("Finding long URL. Short URL: {}", shortUrl);
         try (Jedis jedis = jedisPool.getResource()) {
             String cachedUrl = jedis.get(shortUrl);
             if (cachedUrl != null) {
@@ -79,7 +79,7 @@ class UrlSqlRepositoryImpl implements UrlRepository {
                 return cachedUrl;
             }
 
-            return dslContext.select(Urls.URLS.SHORT_URL)
+            return dslContext.select()
                     .from(Urls.URLS)
                     .where(Urls.URLS.SHORT_URL.eq(shortUrl))
                     .fetchOptional(Urls.URLS.LONG_URL)
