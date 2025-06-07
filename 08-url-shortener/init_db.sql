@@ -1,6 +1,17 @@
+CREATE SEQUENCE url_id_seq START 10000000;
+
 CREATE TABLE urls
 (
-    id        serial PRIMARY KEY,
-    short_url VARCHAR DEFAULT NULL,
-    long_url  VARCHAR DEFAULT NULL UNIQUE
+    id        INTEGER PRIMARY KEY DEFAULT nextval('url_id_seq'),
+    short_url VARCHAR             DEFAULT NULL,
+    long_url  VARCHAR             DEFAULT NULL UNIQUE
 );
+
+CREATE INDEX idx_short_url ON urls USING btree (short_url);
+
+CREATE INDEX idx_long_url ON urls USING btree (long_url);
+
+INSERT INTO urls (short_url, long_url)
+SELECT substr(md5(random()::text), 1, 7)                            AS short_url,
+       'https://example.com/' || substr(md5(random()::text), 1, 20) AS long_url
+FROM generate_series(1, 10_000) ON CONFLICT DO NOTHING;
