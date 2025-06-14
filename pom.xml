@@ -39,6 +39,7 @@
     </properties>
     <modules>
         <module>08-url-shortener</module>
+        <module>04-rate-limiter</module>
     </modules>
 
     <dependencyManagement>
@@ -165,7 +166,6 @@
                 <version>${groovy-all.version}</version>
                 <type>pom</type>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.testcontainers/spock -->
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>spock</artifactId>
