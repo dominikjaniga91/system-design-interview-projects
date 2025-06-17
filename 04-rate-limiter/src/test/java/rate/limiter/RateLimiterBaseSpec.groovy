@@ -1,5 +1,6 @@
 package rate.limiter
 
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.util.time.MutableClock
 
@@ -10,15 +11,16 @@ import java.time.temporal.ChronoUnit
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
-class RateLimiterSpec extends Specification {
+abstract class RateLimiterBaseSpec extends Specification {
 
-    private RateLimiter limiter
-    private Clock clock
+    @Shared
+    RateLimiter limiter
 
-    void setup() {
-        def time = Instant.parse("2025-06-13T12:00:00Z")
-        clock = Clock.fixed(time, ZoneOffset.UTC)
-        limiter = rateLimiter(this.clock)
+    @Shared
+    Clock clock
+
+    void setupSpec() {
+        clock = Clock.fixed(Instant.parse("2025-06-13T12:00:00Z"), ZoneOffset.UTC)
     }
 
     def "should allow request when it does not exceed the limit"() {
@@ -53,7 +55,7 @@ class RateLimiterSpec extends Specification {
         def instant = clock.instant()
         def timestamp = instant.minusMillis(100)
         def serviceName = "service-1"
-        def rateLimiter = rateLimiter(clock)
+        def rateLimiter = new SlidingWindowRateLimiter(rateLimiterRules(), clock)
         rateLimiter.register(serviceName, instant.minusMillis(800))
         rateLimiter.register(serviceName, instant.minusMillis(700))
         rateLimiter.register(serviceName, instant.minusMillis(600))
@@ -89,11 +91,11 @@ class RateLimiterSpec extends Specification {
         pool.shutdown()
     }
 
-    private InMemoryRateLimiter rateLimiter(Clock clock) {
-        new InMemoryRateLimiter(RateLimiterRules.builder()
-                .withCapacity(3)
+    RateLimiterRules rateLimiterRules() {
+        RateLimiterRules.builder()
+                .withMaxAllowed(3)
                 .withPeriod(1)
                 .withUnit(ChronoUnit.SECONDS)
-                .build(), clock)
+                .build()
     }
 }
