@@ -4,12 +4,12 @@ import java.time.temporal.ChronoUnit;
 
 public class RateLimiterRules {
 
-    private final int capacity;
+    private final int maxAllowed;
     private final int period;
     private final ChronoUnit unit;
 
-    private RateLimiterRules(int capacity, int period, ChronoUnit unit) {
-        this.capacity = capacity;
+    private RateLimiterRules(int maxAllowed, int period, ChronoUnit unit) {
+        this.maxAllowed = maxAllowed;
         this.period = period;
         this.unit = unit;
     }
@@ -18,15 +18,23 @@ public class RateLimiterRules {
         return new RateLimiterRules.Builder();
     }
 
-    public int getCapacity() {
-        return capacity;
+    public int maxAllowed() {
+        return maxAllowed;
     }
 
-    public int getPeriod() {
+    public String maxAllowedAsString() {
+        return String.valueOf(maxAllowed);
+    }
+
+    public int period() {
         return period;
     }
 
-    public ChronoUnit getUnit() {
+    public String periodAsString() {
+        return String.valueOf(period);
+    }
+
+    public ChronoUnit unit() {
         return unit;
     }
 
@@ -35,8 +43,8 @@ public class RateLimiterRules {
         private int window;
         private ChronoUnit unit;
 
-        Builder withCapacity(int capacity) {
-            this.maxAllowed = capacity;
+        Builder withMaxAllowed(int maxAllowed) {
+            this.maxAllowed = maxAllowed;
             return this;
         }
 
