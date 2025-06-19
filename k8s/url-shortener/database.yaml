@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: 08-url-shortener-db
+  namespace: k8s-program
+  labels:
+    database: url-shortener-db
+spec:
+  selector:
+    matchLabels:
+      database: url-shortener-db
+  serviceName: url-shortener-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        database: url-shortener-db
+    spec:
+      containers:
+        - name: url-shortener-db
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          volumeMounts:
+            - mountPath: "/docker-entrypoint-initdb.d"
+              name: url-shortener-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: url-shortener-pvc
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "standard"
+        resources:
+          requests:
+            storage: 1Gi

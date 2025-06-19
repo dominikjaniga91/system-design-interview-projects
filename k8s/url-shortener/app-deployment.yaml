@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 08-url-shortener
+  namespace: k8s-program
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: 08-url-shortener
+  template:
+    metadata:
+      labels:
+        app: 08-url-shortener
+    spec:
+      containers:
+        - name: 08-url-shortener
+          image: djaniga/08-url-shortener:latest
+          ports:
+            - containerPort: 8082
