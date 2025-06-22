@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: 08-url-shortener
-  namespace: k8s-program
+  name: url-shortener-service
+  namespace: k8s-sdi
+  labels:
+    app: url-shortener
 spec:
   selector:
-    app: 08-url-shortener
-  type: ClusterIP
+    app: url-shortener
+  type: NodePort
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8082
+      targetPort: 4567

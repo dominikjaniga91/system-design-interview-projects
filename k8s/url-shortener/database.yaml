@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: 08-url-shortener-db
-  namespace: k8s-program
+  name: url-shortener-db
+  namespace: k8s-sdi
   labels:
     database: url-shortener-db
 spec:
@@ -35,8 +35,18 @@ spec:
               memory: "256Mi"
               cpu: "500m"
           volumeMounts:
-            - mountPath: "/docker-entrypoint-initdb.d"
+            - mountPath: "/docker-entrypoint-initdb.d/init.sql"
+              name: init-sql
+              subPath: init.sql
+            - mountPath: "/var/lib/postgresql/data"
               name: url-shortener-pvc
+      volumes:
+        - name: init-sql
+          configMap:
+            name: postgres-config
+            items:
+              - key: init.sql
+                path: init.sql
   volumeClaimTemplates:
     - metadata:
         name: url-shortener-pvc
