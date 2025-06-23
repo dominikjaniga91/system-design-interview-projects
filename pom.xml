@@ -39,6 +39,7 @@
     </properties>
     <modules>
         <module>08-url-shortener</module>
+        <module>04-rate-limiter</module>
     </modules>
 
     <dependencyManagement>
