@@ -20,7 +20,7 @@
         <snakeyaml.version>2.2</snakeyaml.version>
         <jedis.version>6.0.0</jedis.version>
         <log4j-api.version>2.24.3</log4j-api.version>
-<!--        test-->
+        <!--        test-->
         <jupiter.version>5.12.2</jupiter.version>
         <assertj-core.version>3.27.3</assertj-core.version>
         <tc.version>1.21.1</tc.version>
@@ -28,7 +28,7 @@
         <rest-assured.version>5.5.5</rest-assured.version>
         <spock-core.version>2.4-M6-groovy-4.0</spock-core.version>
         <groovy-all.version>4.0.27</groovy-all.version>
-<!--        plugins-->
+        <!--        plugins-->
         <jacoco.version>0.8.13</jacoco.version>
         <jooq.version>3.20.3</jooq.version>
         <kotlin.version>2.0.21</kotlin.version>
@@ -117,7 +117,7 @@
                 <version>${log4j-api.version}</version>
             </dependency>
 
-<!--            tests-->
+            <!--            tests-->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
@@ -192,10 +192,10 @@
                 <configuration>
                     <testSources>
                         <testSource>
-                            <directory>${project.basedir}/src/test/groovy</directory>
-                            <includes>
-                                <include>**/*.groovy</include>
-                            </includes>
+                            <directory>${project.basedir}/src/test/java</directory>
+                        </testSource>
+                        <testSource>
+                            <directory>${project.basedir}/src/integration-test/java</directory>
                         </testSource>
                     </testSources>
                 </configuration>
@@ -222,13 +222,13 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>src/integration-test/java</source>
                                 <source>src/test/java</source>
+                                <source>src/integration-test/java</source>
                             </sources>
                             <resources>
                                 <resource>
-                                    <directory>src/integration-test/resources</directory>
                                     <directory>src/test/resources</directory>
+                                    <directory>src/integration-test/resources</directory>
                                 </resource>
                             </resources>
                         </configuration>
@@ -240,12 +240,12 @@
                 <version>${surefire.version}</version>
                 <configuration>
                     <includes>
-                        <include>**/*Test.java</include>
-                        <include>**/*Specification.groovy</include>
-                        <include>**/*Test.groovy</include>
+                        <include>**/*Spec.groovy</include>
+                        <include>**/*Spec.java</include>
                     </includes>
                     <excludes>
-                        <exclude>**/*IntegrationTest.java</exclude> <!-- Ensures no integration tests are run -->
+                        <exclude>**/*IntegrationSpec.groovy</exclude>
+                        <exclude>**/*IntegrationSpec.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -254,8 +254,8 @@
                 <version>${failsafe.version}</version>
                 <configuration>
                     <includes>
-                        <include>**/*IntegrationTest.groovy</include>
-                        <include>**/*IntegrationTest.java</include>
+                        <include>**/*IntegrationSpec.groovy</include>
+                        <include>**/*IntegrationSpec.java</include>
                     </includes>
                 </configuration>
                 <executions>

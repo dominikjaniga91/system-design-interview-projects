@@ -1,5 +1,6 @@
 package url.shortener
 
+import data.tables.Urls
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL

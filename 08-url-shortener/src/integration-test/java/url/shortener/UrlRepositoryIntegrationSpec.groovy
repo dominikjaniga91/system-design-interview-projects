@@ -14,10 +14,6 @@ class UrlRepositoryIntegrationSpec extends BaseContainerIntegrationSpec {
         urlRepository = new UrlSqlRepositoryImpl(context, jedisPool)
     }
 
-    def cleanupSpec() {
-        context.deleteFrom(Urls.URLS).execute()
-    }
-
     def "should save long URL in database"() {
         given:
         def longUrl = "https://medium.com/@stefanovskyi/unit-test-naming-conventions-dd9208eadbea"
