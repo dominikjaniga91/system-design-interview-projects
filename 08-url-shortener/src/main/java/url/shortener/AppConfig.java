@@ -26,22 +26,10 @@ class AppConfig {
             }
 
             Map<String, Object> config = yaml.load(inputStream);
-
-            var dbMap = (Map<String, Object>) config.get("database");
-            var jedisMap = (Map<String, Object>) config.get("jedis");
-
-            DatabaseConfig db = new DatabaseConfig(
-                    dbMap.get("username").toString(),
-                    dbMap.get("password").toString(),
-                    dbMap.get("url").toString()
+            return new AppConfig(
+                    new DatabaseConfig((Map<String, Object>) config.get("database")),
+                    new JedisConfig((Map<String, Object>) config.get("jedis"))
             );
-
-            JedisConfig jedis = new JedisConfig(
-                    jedisMap.get("host").toString(),
-                    (int) jedisMap.get("port")
-            );
-
-            return new AppConfig(db, jedis);
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to load configuration", e);
@@ -59,10 +47,10 @@ class AppConfig {
         private final String password;
         private final String url;
 
-        private DatabaseConfig(String username, String password, String url) {
-            this.username = username;
-            this.password = password;
-            this.url = url;
+        private DatabaseConfig(Map<String ,Object> config) {
+            username = config.get("username").toString();
+            password = config.get("password").toString();
+            url = config.get("url").toString();;
         }
     }
 
@@ -70,9 +58,9 @@ class AppConfig {
         private final String host;
         private final int port;
 
-        private JedisConfig(String host, int port) {
-            this.host = host;
-            this.port = port;
+        private JedisConfig(Map<String ,Object> config) {
+            this.host = config.get("host").toString();
+            this.port = Integer.parseInt(config.get("port").toString());
         }
     }
 }
