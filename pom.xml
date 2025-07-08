@@ -37,6 +37,7 @@
         <gmavenplus-plugin.version>3.0.2</gmavenplus-plugin.version>
         <tc-spock.version>1.21.1</tc-spock.version>
         <okhttp.version>4.12.0</okhttp.version>
+        <sonar.version>5.1.0.4751</sonar.version>
     </properties>
     <modules>
         <module>08-url-shortener</module>
@@ -299,6 +300,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar.version}</version>
             </plugin>
         </plugins>
     </build>
