@@ -1,39 +1,41 @@
 package gateway;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.util.Map;
 
+import static com.typesafe.config.ConfigFactory.defaultOverrides;
+import static com.typesafe.config.ConfigFactory.parseResourcesAnySyntax;
 import static java.lang.String.format;
 
 class AppConfig {
 
-    private final URLs urls;
+    private final Config config;
 
-    private AppConfig(URLs urIs) {
-        urls = urIs;
+    private AppConfig(Config config) {
+        this.config = config;
     }
 
     public static AppConfig load() {
-        String profile = System.getProperty("profile");
-        Yaml yaml = new Yaml();
-        try (var inputStream = AppConfig.class.getClassLoader().getResourceAsStream(format("configuration-%s.yaml", profile))) {
-            if (inputStream == null) {
-                throw new RuntimeException("Missing configuration.yaml in resources");
-            }
-
-            Map<String, Object> config = yaml.load(inputStream);
-            return new AppConfig(new URLs((String) config.get("urlShortenerUri")));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load configuration", e);
-        }
+        String configFileName = String.format("%s.conf", System.getProperty("profile"));
+        Config config = defaultOverrides()
+                .withFallback(parseResourcesAnySyntax(configFileName))
+                .resolve();
+        return new AppConfig(config);
     }
 
     public String getUrlsShortenerUri() {
-        return urls.urlShortenerUri;
+        return config.getString("api.shortener.url");
     }
 
-    private record URLs(String urlShortenerUri) {
+    public String getJedisHost() {
+        return config.getString("jedis.host");
+    }
+
+    public int getJedisPort() {
+        return config.getInt("jedis.port");
     }
 }
