@@ -1,5 +1,7 @@
 package rate.limiter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -7,6 +9,7 @@ import java.time.Instant;
 
 class SlidingWindowLuaRateLimiter implements RateLimiter {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(SlidingWindowLuaRateLimiter.class);
     private final static String SCRIPT =
             """
             local key = KEYS[1]
@@ -29,17 +32,24 @@ class SlidingWindowLuaRateLimiter implements RateLimiter {
 
     @Override
     public boolean register(String serviceName, Instant timestamp) {
+        LOGGER.info("Registering service {} at {}", serviceName, timestamp);
         String key = "rate_limiter:" + serviceName;
         String uniqueField = timestamp.toString();
 
         try (Jedis jedis = jedisPool.getResource()) {
-            return 1 == (Long) jedis.eval(SCRIPT,
+            boolean allow = 1 == (Long) jedis.eval(SCRIPT,
                     1,
                     key,
                     uniqueField,
                     rules.periodAsString(),
                     rules.maxAllowedAsString()
             );
+            if (allow) {
+                LOGGER.info("Request from service {} has been accepted.", serviceName);
+            } else {
+                LOGGER.error("Request from service {} has been denied.", serviceName);
+            }
+            return allow;
         }
     }
 }

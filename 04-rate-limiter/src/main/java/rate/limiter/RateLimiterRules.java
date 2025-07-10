@@ -14,7 +14,7 @@ public class RateLimiterRules {
         this.unit = unit;
     }
 
-    static RateLimiterRules.Builder builder() {
+    public static RateLimiterRules.Builder builder() {
         return new RateLimiterRules.Builder();
     }
 
@@ -38,28 +38,37 @@ public class RateLimiterRules {
         return unit;
     }
 
-    static class Builder {
+    public static class Builder {
         private int maxAllowed;
         private int window;
         private ChronoUnit unit;
 
-        Builder withMaxAllowed(int maxAllowed) {
+        public Builder withMaxAllowed(int maxAllowed) {
             this.maxAllowed = maxAllowed;
             return this;
         }
 
-        Builder withPeriod(int period) {
+        public Builder withPeriod(int period) {
             this.window = period;
             return this;
         }
 
-        Builder withUnit(ChronoUnit unit) {
+        public Builder withUnit(ChronoUnit unit) {
             this.unit = unit;
             return this;
         }
 
-        RateLimiterRules build() {
+        public RateLimiterRules build() {
             return new RateLimiterRules(this.maxAllowed, this.window, this.unit);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "RateLimiterRules{" +
+                "maxAllowed=" + maxAllowed +
+                ", period=" + period +
+                ", unit=" + unit +
+                '}';
     }
 }

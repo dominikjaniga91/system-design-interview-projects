@@ -39,7 +39,7 @@ class SlidingWindowRateLimiter implements RateLimiter {
             LOGGER.info("Request from service {} has been accepted. Current number of requests {}", serviceName, requestsNumber + 1);
             return true;
         } else {
-            LOGGER.info("Request from service {} has been denied. Current number of requests {}", serviceName, requestsNumber + 1);
+            LOGGER.error("Request from service {} has been denied. Current number of requests {}", serviceName, requestsNumber );
             return false;
         }
     }

@@ -38,6 +38,7 @@
         <tc-spock.version>1.21.1</tc-spock.version>
         <okhttp.version>4.12.0</okhttp.version>
         <sonar.version>5.1.0.4751</sonar.version>
+        <config.version>1.4.3</config.version>
     </properties>
     <modules>
         <module>08-url-shortener</module>
@@ -92,6 +93,11 @@
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
                 <version>${snakeyaml.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.typesafe</groupId>
+                <artifactId>config</artifactId>
+                <version>${config.version}</version>
             </dependency>
             <dependency>
                 <groupId>redis.clients</groupId>
