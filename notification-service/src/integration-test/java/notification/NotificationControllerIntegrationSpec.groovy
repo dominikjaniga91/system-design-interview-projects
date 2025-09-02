@@ -7,10 +7,10 @@ import spock.lang.Specification
 import static io.restassured.RestAssured.given
 import static org.hamcrest.Matchers.equalTo
 
-class NotificationControllerIntegrationTest extends Specification {
+class NotificationControllerIntegrationSpec extends Specification {
 
     def setupSpec() {
-        new NotificationController().routes();
+        new NotificationController(new InMemoryNotificationRepository()).routes();
         Spark.awaitInitialization();
         RestAssured.baseURI = "http://localhost/api/v1/notification";
         RestAssured.port = 4567;
@@ -34,6 +34,6 @@ class NotificationControllerIntegrationTest extends Specification {
                 .post()
         .then()
                 .statusCode(200)
-                .body(equalTo("Notification received"));
+                .body(equalTo("Notification received, id: 1"));
     }
 }
