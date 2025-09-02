@@ -1,0 +1,16 @@
+services:
+  url_shortener_db:
+    container_name: 'notifications_db'
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=testuser
+      - POSTGRES_DB=notifications
+    volumes:
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    ports:
+      - "5432:5432"
+
+volumes:
+    cache:
+      driver: local
