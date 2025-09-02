@@ -1,5 +1,5 @@
 package notification;
 
-public enum NotificationType {
+enum NotificationType {
     SMS, EMAIL
 }

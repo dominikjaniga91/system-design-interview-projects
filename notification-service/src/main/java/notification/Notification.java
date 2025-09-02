@@ -2,12 +2,11 @@ package notification;
 
 import java.util.List;
 
-public record NotificationRequest(
+record Notification(
         String serviceName,
         List<NotificationType> types,
         String sender,
         List<String> recipientsIds,
         String title,
         String message) {
-
 }
