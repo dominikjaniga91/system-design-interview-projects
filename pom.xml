@@ -43,7 +43,7 @@
         <module>08-url-shortener</module>
         <module>04-rate-limiter</module>
         <module>api-gateway</module>
-        <module>notification-service</module>
+        <module>10-notification-service</module>
     </modules>
 
     <dependencyManagement>
