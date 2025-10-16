@@ -8,16 +8,16 @@ import static spark.Spark.post;
 class NotificationController {
 
     private static final String BASE_PATH = "/api/v1";
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
 
-    NotificationController(NotificationRepository notificationRepository) {
-        this.notificationRepository = notificationRepository;
+    NotificationController(NotificationService notificationService) {
+        this.notificationService = notificationService;
     }
 
     void routes() {
         post(BASE_PATH + "/notification", (req, res) -> {
             var request = new Gson().fromJson(req.body(), Notification.class);
-            Integer id = notificationRepository.saveNotification(request);
+            Integer id = notificationService.saveNotification(request);
             return format("Notification received, id: %s", id);
         });
     }

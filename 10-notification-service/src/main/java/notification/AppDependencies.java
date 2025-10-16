@@ -1,5 +1,6 @@
 package notification;
 
+import org.apache.kafka.clients.producer.KafkaProducer;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
@@ -13,8 +14,10 @@ class AppDependencies {
     AppDependencies(AppConfig config) throws SQLException {
         var connection = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
         var context = DSL.using(connection, SQLDialect.POSTGRES);
-        var notificationRepository = new NotificationSqlRepository(context);
-        notificationController = new NotificationController(notificationRepository);
+        var repository = new NotificationSqlRepository(context);
+        var producer = new NotificationProducer(new KafkaProducer<>(config.producerConfig()), config.getNotificationsTopic());
+        var service = new NotificationService(repository, producer);
+        notificationController = new NotificationController(service);
     }
 
     public NotificationController getNotificationController() {

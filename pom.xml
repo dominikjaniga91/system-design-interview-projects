@@ -38,6 +38,8 @@
         <okhttp.version>4.12.0</okhttp.version>
         <sonar.version>5.1.0.4751</sonar.version>
         <config.version>1.4.3</config.version>
+        <kafka-clients.version>4.1.0</kafka-clients.version>
+        <tc.kafka.version>1.21.3</tc.kafka.version>
     </properties>
     <modules>
         <module>08-url-shortener</module>
@@ -52,6 +54,17 @@
                 <groupId>com.sparkjava</groupId>
                 <artifactId>spark-core</artifactId>
                 <version>${spark-core.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka-clients.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>
@@ -179,6 +192,12 @@
                 <groupId>org.testcontainers</groupId>
                 <artifactId>spock</artifactId>
                 <version>${tc-spock.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>kafka</artifactId>
+                <version>${tc.kafka.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
