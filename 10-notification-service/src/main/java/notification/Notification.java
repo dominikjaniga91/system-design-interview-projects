@@ -11,17 +11,6 @@ record Notification(
         String title,
         String message) {
 
-    /*
-    {
-    "serviceName": user-service,
-    "types": [SMS, EMAIL],
-    "sender": 23141,
-    "recipientsIds": [23145, 43523],
-    "title": Email verification,
-    "message": Your email has been verified
-}
-     */
-
     List<String> getTypesAsString() {
         return types.stream()
                 .map(n -> String.format("\"%s\"", n))
